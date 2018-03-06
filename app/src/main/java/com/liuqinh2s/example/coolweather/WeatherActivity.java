@@ -1,5 +1,6 @@
 package com.liuqinh2s.example.coolweather;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -9,6 +10,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -21,7 +23,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.liuqinh2s.example.coolweather.gson.Forecast;
 import com.liuqinh2s.example.coolweather.gson.Weather;
-import com.liuqinh2s.example.coolweather.util.HttpUitl;
+import com.liuqinh2s.example.coolweather.service.AutoUpdateService;
+import com.liuqinh2s.example.coolweather.util.HttpUtil;
 import com.liuqinh2s.example.coolweather.util.Utility;
 
 import java.io.IOException;
@@ -31,6 +34,8 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class WeatherActivity extends AppCompatActivity {
+
+    private static final String TAG = "WeatherActivity";
 
     private ScrollView weatherLayout;
 
@@ -132,7 +137,8 @@ public class WeatherActivity extends AppCompatActivity {
     public void requestWeather(final String weatherId){
         String weatherUrl = "http://guolin.tech/api/weather?cityid=" +
                 weatherId + "&key=bc0418b57b2d4918819d3974ac1285d9";
-        HttpUitl.sendOkHttpRequest(weatherUrl, new Callback() {
+        Log.d(TAG, weatherUrl);
+        HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
@@ -204,6 +210,8 @@ public class WeatherActivity extends AppCompatActivity {
         carWashText.setText(carWash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
+        Intent intent = new Intent(this, AutoUpdateService.class);
+        startService(intent);
     }
 
     /**
@@ -211,7 +219,7 @@ public class WeatherActivity extends AppCompatActivity {
      */
     private void loadBingPic(){
         String requestBingPic = "http://guolin.tech/api/bing_pic";
-        HttpUitl.sendOkHttpRequest(requestBingPic, new Callback() {
+        HttpUtil.sendOkHttpRequest(requestBingPic, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();

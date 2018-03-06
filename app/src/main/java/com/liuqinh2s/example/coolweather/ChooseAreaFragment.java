@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.liuqinh2s.example.coolweather.db.City;
 import com.liuqinh2s.example.coolweather.db.County;
 import com.liuqinh2s.example.coolweather.db.Province;
-import com.liuqinh2s.example.coolweather.util.HttpUitl;
+import com.liuqinh2s.example.coolweather.util.HttpUtil;
 import com.liuqinh2s.example.coolweather.util.Utility;
 
 import org.litepal.crud.DataSupport;
@@ -201,7 +201,7 @@ public class ChooseAreaFragment extends Fragment {
      */
     private void queryFromServer(final String address, final String type) {
         showProgressDialog();
-        HttpUitl.sendOkHttpRequest(address, new Callback() {
+        HttpUtil.sendOkHttpRequest(address, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 // 通过runOnUiThread()方法返回到主线程处理逻辑
